@@ -105,6 +105,12 @@
             })
 
 
+            // Adding event for keyboard input
+            document.getElementById("submit-display").addEventListener("change", function(){
+                submittedNumber = document.getElementById("submit-display").value;
+            })
+
+
 
             // Adding click event on the submit button
             document.getElementById("submit-btn").addEventListener("click", function () {
@@ -123,8 +129,11 @@
                     if (tryCount > 0){
                         tryCount--;
                     }
+
                 }
                 document.getElementById("try-left").innerText = tryCount;
+                document.getElementById("submit-display").value = "";
+                submittedNumber = "";
             })
 
             
