@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input id="pin-display" class="form-control" type="text">
+                    <button id="generate-pin" class="generate-btn">Generate Pin</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-section half-width">
+                    <input id="submit-display" class="form-control" type="text">
+                    <div class="numbers">
+                        <div class="calc-body">
+                            <div class="calc-button-row">
+                                <div id="7" class="button">7</div>
+                                <div id="8" class="button">8</div>
+                                <div id="9" class="button">9</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div id="4" class="button">4</div>
+                                <div id="5" class="button">5</div>
+                                <div id="6" class="button">6</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div id="1" class="button">1</div>
+                                <div id="2" class="button">2</div>
+                                <div id="3" class="button">3</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div id="backspace" class="button">&lt;</div>
+                                <div id="0" class="button">0</div>
+                                <div id="clear" class="button">C</div>
+                            </div>
+                            <div>
+                                <button id="submit-btn" type="submit" class="submit-btn">Submit</button>
+                                <p class="action-left"><span id="try-left">3</span> try left</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="notify-section">
+                <p id="no-match" class="notify">❌ Pin Didn't Match, Please try again</p>
+                <p id="no-try-left" class="notify">❌ No try left!</p>
+                <p id="matched" class="notify">✅ Pin Matched... Secret door is opening for you</p>
+            </div>
+        </div>
+
+        <script>
+            var pinNumber = 0;
+            var tryCount = 3;
+            var submittedNumber = '';
+
+            // Generating PIN
+            document.getElementById("generate-pin").addEventListener("click", function () {
+                for (let i = 0; ; i++) {
+                    var randomNumber = Math.round(Math.random() * 10000);
+                    if (randomNumber >= 1000 && randomNumber < 10000) {
+                        pinNumber = randomNumber;
+                        break;
+                    }
+                }
+                document.getElementById("pin-display").value = pinNumber;
+            })
+            
+
+            // Adding click event on number buttons
+            function typeNumber(numId) {
+                document.getElementById(numId).addEventListener("click", function () {
+                    submittedNumber = submittedNumber + numId;
+                    document.getElementById("submit-display").value = submittedNumber;
+                })
+            }
+
+            for (let i = 0; i < 10; i++) {
+                var btnID = "" + i;
+                typeNumber(btnID);
+            }
+
+
+            // Adding event on clear button
+            document.getElementById("clear").addEventListener("click", function () {
+                submittedNumber = "";
+                document.getElementById("submit-display").value = submittedNumber;
+            })
+
+
+            // Adding event backspace button
+            document.getElementById("backspace").addEventListener("click", function(){
+                submittedNumber = submittedNumber.slice(0, -1);
+                document.getElementById("submit-display").value = submittedNumber;
+            })
+
+
+
+            // Adding click event on the submit button
+            document.getElementById("submit-btn").addEventListener("click", function () {
+                if (pinNumber == submittedNumber && tryCount > 0) {
+                    document.getElementById("matched").style.display = "block";
+                    document.getElementById("no-match").style.display = "none";
+                }
+                else if(tryCount == 0){
+                    document.getElementById("no-try-left").style.display = "block";
+                    document.getElementById("matched").style.display = "none";
+                    document.getElementById("no-match").style.display = "none";
+                }
+                else {
+                    document.getElementById("no-match").style.display = "block";
+                    document.getElementById("matched").style.display = "none";
+                    if (tryCount > 0){
+                        tryCount--;
+                    }
+                }
+                document.getElementById("try-left").innerText = tryCount;
+            })
+
+            
+
+
+        </script>
+</body>
+
+</html>
